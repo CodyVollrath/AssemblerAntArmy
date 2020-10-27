@@ -1,0 +1,112 @@
+00001  0000             ; DO NOT DELETE THIS CODE; IT IS REQUIRED TO RUN THE PROGRAM.
+00002  0001             ; 10 SYS (2064)
+00003  0001             
+00004  0001             *=$0801
+00005  0801             
+00006  0801  0E 08 0A              BYTE    $0E, $08, $0A, $00, $9E, $20, $28,  $32, $30, $36, $34, $29, $00, $00, $00
+00007  0810             
+00008  0810             ; PROGRAM ENTRANCE
+00009  0810             *=$0810
+00010  0810             PROGRAM_START 
+00011  0810             ; START YOUR CODE HERE
+00012  0810             
+00013  0810             ;COPY SPRITE DATA
+00014  0810  A2 3F                 LDX #63
+00015  0812             BUILD_ANT_LOOP 
+00016  0812  BD 54 08              LDA ANT_DATA,X
+00017  0815  9D 80 2E              STA $2E80,X
+00018  0818  CA                    DEX
+00019  0819  D0 F7                 BNE BUILD_ANT_LOOP
+00020  081B             
+00021  081B             ;SET THE SPRITE POINTER FOR SPRITES
+00022  081B  A9 BA                 LDA #186 ;FIRST MEMORY LOCATION FOR ANT_DATA ($2E80) DIVIDED BY 64
+00023  081D  A2 07                 LDX #7
+00024  081F             STORE_SPRITE_LOOP 
+00025  081F  9D F8 07              STA $07F8,X
+00026  0822  CA                    DEX
+00027  0823  10 FA                 BPL STORE_SPRITE_LOOP
+00028  0825             
+00029  0825             ;CHANGE BACKGROUND COLOR
+00030  0825  A9 08                 LDA #8
+00031  0827  8D 21 D0              STA $D021
+00032  082A             
+00033  082A             ;SET SPRITE COLOR
+00034  082A  A2 07                 LDX #7
+00035  082C             SET_SPRITE_COLOR_LOOP 
+00036  082C  86 FB                 STX $00FB ;UNUSED ZERO PAGE MEMORY LOCATION TO HOLD X REGISTER'S VALUE
+00037  082E  A5 FB                 LDA $00FB ;STORE THE CURRENT X VALUE IN THE ACCUMULATOR
+00038  0830  9D 27 D0              STA $D027,X ;LOAD THE X VALUE AT THE XTH POSITION OF THE MEMORY RANGE
+00039  0833  CA                    DEX
+00040  0834  10 F6                 BPL SET_SPRITE_COLOR_LOOP
+00041  0836             
+00042  0836             ;SET X POSITION
+00043  0836  A9 AA                 LDA #170;STARTING AT 170 FOR THE X POSITION
+00044  0838  A2 0E                 LDX #14
+00045  083A             SET_SPRITE_X_POSITION 
+00046  083A  9D 00 D0              STA $D000,X
+00047  083D  CA                    DEX
+00048  083E  CA                    DEX
+00049  083F  10 F9                 BPL SET_SPRITE_X_POSITION
+00050  0841             
+00051  0841             ;SET Y POSITION
+00052  0841  A9 46                 LDA #70 ;START AT 70 FOR THE Y POSITION
+00053  0843  A2 0F                 LDX #15
+00054  0845             SET_SPRITE_Y_POSITION 
+00055  0845  CA                    DEX
+00056  0846  9D 01 D0              STA $D001,X
+00057  0849  69 12                 ADC #18 ;INCREASE THE Y POSITION BY 18 FOR EACH ODD INTERVAL
+00058  084B  CA                    DEX
+00059  084C  10 F7                 BPL SET_SPRITE_Y_POSITION
+00060  084E             
+00061  084E             ;ENABLE ALL SPRITES (MAKE VISIBLE)
+00062  084E  A9 FF                 LDA #255
+00063  0850  8D 15 D0              STA $D015
+00064  0853             
+00065  0853             ; DO NOT WRITE CODE PAST THIS LINE
+00066  0853             ; THE FOLLOWING RTS INSTRUCTION IS REQUIRED TO EXIT THE PROGRAM
+00067  0853  60                    RTS
+00068  0854             
+00069  0854             ; PIXEL DATA FOR THE ANT
+00070  0854             ANT_DATA
+00071  0854  00 00 00              BYTE $00,$00,$00
+00072  0857  00 00 00              BYTE $00,$00,$00
+00073  085A  00 00 00              BYTE $00,$00,$00
+00074  085D  00 00 01              BYTE $00,$00,$01
+00075  0860  00 00 61              BYTE $00,$00,$61
+00076  0863  00 00 11              BYTE $00,$00,$11
+00077  0866  00 00 0E              BYTE $00,$00,$0E
+00078  0869  00 00 1F              BYTE $00,$00,$1F
+00079  086C  00 00 1F              BYTE $00,$00,$1F
+00080  086F  0F 1F B5              BYTE $0F,$1F,$B5
+00081  0872  10 A0 7F              BYTE $10,$A0,$7F
+00082  0875  2F CF DF              BYTE $2F,$CF,$DF
+00083  0878  5F DF BF              BYTE $5F,$DF,$BF
+00084  087B  5F DF BA              BYTE $5F,$DF,$BA
+00085  087E  BF DF A9              BYTE $BF,$DF,$A9
+00086  0881  BF BF C4              BYTE $BF,$BF,$C4
+00087  0884  FA 1F A0              BYTE $FA,$1F,$A0
+00088  0887  92 12 90              BYTE $92,$12,$90
+00089  088A  21 24 88              BYTE $21,$24,$88
+00090  088D  21 24 48              BYTE $21,$24,$48
+00091  0890  21 24 44              BYTE $21,$24,$44
+00092  0893  00                    BYTE $00
+00093  0894             
+00094  0894             
+
+******* 7 Label(s) *******
+ANT_DATA = $0854 
+build_ant_loop = $0812 
+PROGRAM_START = $0810 
+set_sprite_color_loop = $082C 
+set_sprite_x_position = $083A 
+set_sprite_y_position = $0845 
+store_sprite_loop = $081F 
+
+******* 1 Unused label(s) *******
+PROGRAM_START
+
+******* 1 Variable(s) *******
+tgt_c64  = $0001
+******* 1 Unused variables(s) *******
+tgt_c64
+
